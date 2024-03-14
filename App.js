@@ -4,8 +4,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import EncryptionScreenText from './screens/EncryptionScreenText.js';
-import EncryptionScreenFile from './screens/EncyptionScreenFile.js'
-import OptionEnDe from './screens/OptionEnDe.js'
+import EncryptionScreenFile from './screens/EncyptionScreenFile.js';
+import OptionEnDe from './screens/OptionEnDe.js';
 import DecryptionScreenText from './screens/DecryptionScreenText.js';
 
 // AppRegistry.registerComponent(appName, () => EncryptionScreenText);
@@ -13,32 +13,32 @@ import DecryptionScreenText from './screens/DecryptionScreenText.js';
 const Stack = createStackNavigator();
 
 const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-      <Stack.Screen
-          name="OptionEnDe"
-          component={OptionEnDe}
-          options={{ title: 'Option Encryption dan Decryption' }}
-        />
-        <Stack.Screen
-          name="EncryptionText"
-          component={EncryptionScreenText}
-          options={{ title: 'Encryption Screen' }}
-        />
-        <Stack.Screen
-          name="EncryptionFile"
-          component={EncryptionScreenFile}
-          options={{ title: 'Encryption Screen' }}
-        />
-        <Stack.Screen
-          name="DecryptionText"
-          component={DecryptionScreenText}
-          options={{ title: 'Encryption Screen' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+	return (
+		<NavigationContainer>
+			<Stack.Navigator>
+				<Stack.Screen
+					name='OptionEnDe'
+					component={OptionEnDe}
+					options={{ title: 'Modified RC4 Encryption & Decryption' }}
+				/>
+				<Stack.Screen
+					name='EncryptionText'
+					component={EncryptionScreenText}
+					options={{ title: 'Encryption with Text' }}
+				/>
+				<Stack.Screen
+					name='EncryptionFile'
+					component={EncryptionScreenFile}
+					options={{ title: 'Encryption with File' }}
+				/>
+				<Stack.Screen
+					name='DecryptionText'
+					component={DecryptionScreenText}
+					options={{ title: 'Decryption with Text' }}
+				/>
+			</Stack.Navigator>
+		</NavigationContainer>
+	);
 };
 
 export default App;
