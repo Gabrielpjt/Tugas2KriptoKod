@@ -25,7 +25,7 @@ const MenuScreen = ({ navigation }) => {
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.button}
-					onPress={() => navigation.navigate('FileDecryption')}
+					onPress={() => navigation.navigate('DecryptionFile')}
 				>
 					<Text style={styles.buttonText}>File Decryption</Text>
 				</TouchableOpacity>

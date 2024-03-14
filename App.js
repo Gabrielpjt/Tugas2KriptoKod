@@ -7,6 +7,7 @@ import EncryptionScreenText from './screens/EncryptionScreenText.js';
 import EncryptionScreenFile from './screens/EncyptionScreenFile.js';
 import OptionEnDe from './screens/OptionEnDe.js';
 import DecryptionScreenText from './screens/DecryptionScreenText.js';
+import DecryptionScreenFile from './screens/DecryptionScreenFile.js';
 
 // AppRegistry.registerComponent(appName, () => EncryptionScreenText);
 
@@ -35,6 +36,11 @@ const App = () => {
 					name='DecryptionText'
 					component={DecryptionScreenText}
 					options={{ title: 'Decryption with Text' }}
+				/>
+				<Stack.Screen
+					name='DecryptionFile'
+					component={DecryptionScreenFile}
+					options={{ title: 'Decryption with File' }}
 				/>
 			</Stack.Navigator>
 		</NavigationContainer>

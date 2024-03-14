@@ -17,7 +17,7 @@ const FilePickerExample = () => {
 		return keyArray;
 	};
 
-	const encryptRC4 = (text, key) => {
+	const decryptRC4 = (text, key) => {
 		let keyArray = generateRC4Key(key);
 		let result = '';
 		let j = 0;
@@ -48,25 +48,25 @@ const FilePickerExample = () => {
 		return result;
 	};
 
-	const encryptVigenere = (text, keyword) => {
-		let encryptedText = '';
+	const decryptVigenere = (text, keyword) => {
+		let decryptedText = '';
 		for (let i = 0; i < text.length; i++) {
 			const keyIndex = i % keyword.length;
 			const keyChar = keyword.charCodeAt(keyIndex) - 32;
-			const textChar = text.charCodeAt(i) + keyChar;
-			encryptedText += String.fromCharCode(textChar);
+			const textChar = text.charCodeAt(i) - keyChar;
+			decryptedText += String.fromCharCode(textChar);
 		}
-		return encryptedText;
+		return decryptedText;
 	};
 
-	const handleEncrypt = async () => {
+	const handleDecrypt = async () => {
 		if (!fileContent || !keyword) {
 			Alert.alert('Error', 'File and keyword are required');
 			return;
 		}
 
-		const rc4Encrypted = encryptRC4(fileContent, keyword);
-		const finalEncrypted = encryptVigenere(rc4Encrypted, keyword);
+		const rc4Decrypted = decryptVigenere(fileContent, keyword);
+		const finalDecrypted = decryptRC4(rc4Decrypted, keyword);
 
 		const permissions =
 			await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
@@ -77,11 +77,11 @@ const FilePickerExample = () => {
 			const encryptedFileUri =
 				await FileSystem.StorageAccessFramework.createFileAsync(
 					directoryUri,
-					'encrypted',
+					'decrypted',
 					fileMime
 				);
 
-			await FileSystem.writeAsStringAsync(encryptedFileUri, finalEncrypted, {
+			await FileSystem.writeAsStringAsync(encryptedFileUri, finalDecrypted, {
 				encoding: 'base64',
 			});
 		}
@@ -129,12 +129,12 @@ const FilePickerExample = () => {
 				</View>
 			)}
 			<TextInput
-				placeholder='Enter encryption key'
+				placeholder='Enter decryption key'
 				value={keyword}
 				onChangeText={setKeyword}
 				style={styles.input}
 			/>
-			<Button title='Encrypt' onPress={handleEncrypt} />
+			<Button title='Decrypt' onPress={handleDecrypt} />
 		</View>
 	);
 };
