@@ -2,12 +2,23 @@ import React, { useState } from 'react';
 import { View, Text, Button, Alert, TextInput, StyleSheet } from 'react-native'; // Tambahkan Alert dari react-native
 import * as DocumentPicker from 'expo-document-picker'; // Perbaiki import dari expo-document-picker
 import * as FileSystem from 'expo-file-system';
+import { Buffer } from 'buffer';
 
 const FilePickerExample = () => {
 	const [fileContent, setFileContent] = useState(null);
 	const [fileName, setFileName] = useState('');
 	const [fileMime, setFileMime] = useState('');
 	const [keyword, setKeyword] = useState('');
+
+	// Function to encode a string to base64
+	const base64Encode = (str) => {
+		return Buffer.from(str, 'binary').toString('base64');
+	};
+
+	// Function to decode a base64 string to a string
+	const base64Decode = (str) => {
+		return Buffer.from(str, 'base64').toString('binary');
+	};
 
 	const generateRC4Key = (key) => {
 		const keyArray = [];
@@ -66,7 +77,7 @@ const FilePickerExample = () => {
 		}
 
 		const rc4Encrypted = encryptRC4(fileContent, keyword);
-		const finalEncrypted = encryptVigenere(rc4Encrypted, keyword);
+		const finalEncrypted = base64Encode(encryptVigenere(rc4Encrypted, keyword));
 
 		const permissions =
 			await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
@@ -112,7 +123,7 @@ const FilePickerExample = () => {
 			const data = await FileSystem.readAsStringAsync(uri, {
 				encoding: 'base64',
 			});
-			return data;
+			return base64Decode(data);
 		} catch (error) {
 			console.error('Error reading file:', error);
 			Alert.alert('Error', 'Gagal membaca file');
