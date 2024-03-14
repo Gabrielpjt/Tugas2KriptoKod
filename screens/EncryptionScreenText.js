@@ -9,6 +9,7 @@ import {
 	TouchableOpacity,
 	Clipboard,
 } from 'react-native'; // Menggunakan Clipboard dari 'react-native'
+import * as FileSystem from 'expo-file-system';
 
 const EncryptionScreenText = () => {
 	const [inputText, setInputText] = useState('');
@@ -82,6 +83,26 @@ const EncryptionScreenText = () => {
 		setCopiedText(true);
 	};
 
+	const downloadFile = async () => {
+		const permissions =
+			await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+		if (permissions.granted) {
+			const directoryUri = permissions.directoryUri;
+
+			const encryptedFileUri =
+				await FileSystem.StorageAccessFramework.createFileAsync(
+					directoryUri,
+					'encrypted',
+					'text/plain'
+				);
+
+			await FileSystem.writeAsStringAsync(encryptedFileUri, encryptedText, {
+				encoding: 'utf8',
+			});
+		}
+	};
+
 	return (
 		<View style={styles.container}>
 			<TextInput
@@ -96,7 +117,11 @@ const EncryptionScreenText = () => {
 				value={keyword}
 				onChangeText={setKeyword}
 			/>
-			<Button title='Encrypt' onPress={handleEncrypt} />
+			<Button
+				title='Encrypt'
+				onPress={handleEncrypt}
+				disabled={encryptedText.length !== 0}
+			/>
 			{encryptedText ? (
 				<View style={styles.outputContainer}>
 					<Text style={styles.label}>Encrypted Text:</Text>
@@ -107,6 +132,7 @@ const EncryptionScreenText = () => {
 					{copiedText && (
 						<Text style={styles.copiedText}>Copied to Clipboard!</Text>
 					)}
+					<Button title='Download as txt file' onPress={downloadFile} />
 				</View>
 			) : null}
 		</View>
@@ -145,12 +171,12 @@ const styles = StyleSheet.create({
 		borderColor: '#ccc',
 		borderRadius: 5,
 		padding: 10,
-		marginTop: 10,
+		marginVertical: 10,
 		width: '100%',
 		textAlign: 'center',
 	},
 	copiedText: {
-		marginTop: 10,
+		marginBottom: 15,
 		color: 'green',
 	},
 });

@@ -9,11 +9,13 @@ import {
 	TouchableOpacity,
 	Clipboard,
 } from 'react-native'; // Menggunakan Clipboard dari 'react-native'
+import * as FileSystem from 'expo-file-system';
 
 const DecryptionScreenText = () => {
 	const [encryptedText, setEncryptedText] = useState('');
 	const [keyword, setKeyword] = useState('');
 	const [decryptedText, setDecryptedText] = useState('');
+	const [copiedText, setCopiedText] = useState(false);
 
 	const generateRC4Key = (key) => {
 		const keyArray = [];
@@ -76,6 +78,31 @@ const DecryptionScreenText = () => {
 		setDecryptedText(finalDecrypted);
 	};
 
+	const copyToClipboard = () => {
+		Clipboard.setString(encryptedText);
+		setCopiedText(true);
+	};
+
+	const downloadFile = async () => {
+		const permissions =
+			await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+		if (permissions.granted) {
+			const directoryUri = permissions.directoryUri;
+
+			const encryptedFileUri =
+				await FileSystem.StorageAccessFramework.createFileAsync(
+					directoryUri,
+					'decrypted',
+					'text/plain'
+				);
+
+			await FileSystem.writeAsStringAsync(encryptedFileUri, decryptedText, {
+				encoding: 'utf8',
+			});
+		}
+	};
+
 	return (
 		<View style={styles.container}>
 			<TextInput
@@ -95,7 +122,13 @@ const DecryptionScreenText = () => {
 				<View style={styles.outputContainer}>
 					<Text style={styles.label}>Decrypted Text:</Text>
 					<Text style={styles.info}>(Click to Copy)</Text>
-					<Text style={styles.output}>{decryptedText}</Text>
+					<TouchableOpacity onPress={copyToClipboard}>
+						<Text style={styles.output}>{decryptedText}</Text>
+					</TouchableOpacity>
+					{copiedText && (
+						<Text style={styles.copiedText}>Copied to Clipboard!</Text>
+					)}
+					<Button title='Download as txt file' onPress={downloadFile} />
 				</View>
 			) : null}
 		</View>
@@ -134,9 +167,13 @@ const styles = StyleSheet.create({
 		borderColor: '#ccc',
 		borderRadius: 5,
 		padding: 10,
-		marginTop: 10,
+		marginVertical: 10,
 		width: '100%',
 		textAlign: 'center',
+	},
+	copiedText: {
+		marginBottom: 15,
+		color: 'green',
 	},
 });
 
