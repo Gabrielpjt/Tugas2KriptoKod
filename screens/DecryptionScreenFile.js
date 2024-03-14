@@ -9,6 +9,7 @@ const FilePickerExample = () => {
 	const [fileName, setFileName] = useState('');
 	const [fileMime, setFileMime] = useState('');
 	const [keyword, setKeyword] = useState('');
+	const [decryptedContent, setDecryptedContent] = useState('');
 
 	// Function to encode a string to base64
 	const base64Encode = (str) => {
@@ -78,24 +79,7 @@ const FilePickerExample = () => {
 
 		const rc4Decrypted = decryptVigenere(fileContent, keyword);
 		const finalDecrypted = base64Encode(decryptRC4(rc4Decrypted, keyword));
-
-		const permissions =
-			await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
-
-		if (permissions.granted) {
-			const directoryUri = permissions.directoryUri;
-
-			const encryptedFileUri =
-				await FileSystem.StorageAccessFramework.createFileAsync(
-					directoryUri,
-					'decrypted',
-					fileMime
-				);
-
-			await FileSystem.writeAsStringAsync(encryptedFileUri, finalDecrypted, {
-				encoding: 'base64',
-			});
-		}
+		setDecryptedContent(finalDecrypted);
 	};
 
 	const pickFile = async () => {
@@ -131,12 +115,32 @@ const FilePickerExample = () => {
 		}
 	};
 
+	const downloadFile = async () => {
+		const permissions =
+			await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+		if (permissions.granted) {
+			const directoryUri = permissions.directoryUri;
+
+			const encryptedFileUri =
+				await FileSystem.StorageAccessFramework.createFileAsync(
+					directoryUri,
+					'decrypted',
+					fileMime
+				);
+
+			await FileSystem.writeAsStringAsync(encryptedFileUri, decryptedContent, {
+				encoding: 'base64',
+			});
+		}
+	};
+
 	return (
 		<View style={styles.container}>
 			<Button title='Pilih File' onPress={pickFile} />
 			{fileName && (
 				<View style={{ marginTop: 5, marginBottom: 5 }}>
-					<Text>File {fileName} terpilih</Text>
+					<Text>File {fileName} has been chosen</Text>
 				</View>
 			)}
 			<TextInput
@@ -145,7 +149,21 @@ const FilePickerExample = () => {
 				onChangeText={setKeyword}
 				style={styles.input}
 			/>
-			<Button title='Decrypt' onPress={handleDecrypt} />
+			<Button
+				title='Decrypt'
+				onPress={handleDecrypt}
+				disabled={decryptedContent.length !== 0}
+			/>
+			{decryptedContent && (
+				<View style={{ marginTop: 10 }}>
+					<Text
+						style={{ marginVertical: 5, textAlign: 'center', color: 'green' }}
+					>
+						File decrypted successfully
+					</Text>
+					<Button title='Download decrypted file' onPress={downloadFile} />
+				</View>
+			)}
 		</View>
 	);
 };
