@@ -83,7 +83,7 @@ const FilePickerExample = () => {
 				);
 
 			await FileSystem.writeAsStringAsync(encryptedFileUri, fileContent, {
-				encoding: 'utf8',
+				encoding: 'base64',
 			});
 		}
 	};
@@ -91,7 +91,7 @@ const FilePickerExample = () => {
 	const pickFile = async () => {
 		try {
 			const res = await DocumentPicker.getDocumentAsync();
-			if (res.assets[0].name) {
+			if (!res.canceled) {
 				// Jika pemilihan file berhasil
 				const fileData = await readFileContent(res.assets[0].uri);
 				setFileContent(fileData);
@@ -111,7 +111,7 @@ const FilePickerExample = () => {
 	const readFileContent = async (uri) => {
 		try {
 			const data = await FileSystem.readAsStringAsync(uri, {
-				encoding: 'utf8',
+				encoding: 'base64',
 			});
 			return data;
 		} catch (error) {
