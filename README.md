@@ -6,8 +6,8 @@ Ini adalah panduan singkat untuk membantu Anda menjalankan kode sumber dari repo
 
 ## Langkah 1: Unduh Kode dari GitHub
 
-- Buka repositori GitHub yang ingin Anda jalankan.
 - Klik tombol "Clone or Download" dan pilih opsi yang sesuai (unduh ZIP atau gunakan Git untuk kloning repositori).
+- Atau copy link github ini, dan ketik git clone + link copy ke folder yang ada tuju
 
 ## Langkah 2: Ekstrak Kode Sumber
 
@@ -39,13 +39,8 @@ Ini adalah panduan singkat untuk membantu Anda menjalankan kode sumber dari repo
 - Klik tombol "Run" untuk mengompilasi dan menjalankan aplikasi di emulator.
 
 ## Langkah 8: Tunggu Proses Kompilasi dan Instalasi
-
+-Pada terminal proyek aplikasi, kemudian ketik 'npm start', kemudian ketik a untuk menjalankan dalam os android
 - Tunggu hingga Android Studio menyelesaikan proses kompilasi dan instalasi aplikasi di emulator.
 
-## Langkah 9: Uji Aplikasi
-
-- Setelah aplikasi diinstal di emulator, buka aplikasi dan pastikan semuanya berjalan sesuai yang diharapkan.
-
-Pastikan untuk membaca README file yang disediakan bersama dengan proyek karena mungkin ada instruksi tambahan atau persyaratan yang perlu Anda ikuti.
 
 Selamat mencoba!
